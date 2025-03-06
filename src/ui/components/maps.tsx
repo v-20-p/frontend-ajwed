@@ -3,17 +3,49 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
 // Fix marker icon issue in Leaflet
-import markerIcon from "../../ajawed.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-const customIcon = new L.Icon({
-  iconUrl: markerIcon,
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import redCamera from "../assets/map-marker-red.png"
+import greenCamera from "../assets/map-marker-green.png"
+import grayCamera from "../assets/map-marker-gray.png"
+
+
+
+interface Cameras{
+
+    id: number;
+    traffic_status: string;
+    battery_percentage: number;
+    is_connected: boolean;
+    latitude: number;
+    longitude: number;
+
+}
+interface props{
+  camera:Cameras[]
+}
+
+const redIcon = new L.Icon({
+  iconUrl: redCamera,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+const greenIcon = new L.Icon({
+  iconUrl: greenCamera,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+const grayIcon = new L.Icon({
+  iconUrl: grayCamera,
   shadowUrl: markerShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
 
-export default function CameraMap() {
+
+export default function CameraMap({camera}:props) {
   return (
     <MapContainer
     center={[18.2167, 42.5000]} // Abha location
@@ -32,9 +64,32 @@ export default function CameraMap() {
       />
 
       {/* Example Camera Marker */}
-      <Marker position={[18.2167, 42.5000]} icon={customIcon}>
-        <Popup>📍 موقع الكاميرا في أبها</Popup>
-      </Marker>
+
+      {camera.map((v) => {
+        const cameraIcon =
+          v.is_connected
+            ? v.traffic_status === "green"
+              ? greenIcon
+              : redIcon
+            : grayIcon;
+
+        return (
+          <Marker
+            key={v.id}
+            position={[v.latitude, v.longitude]}
+            icon={cameraIcon}
+          >
+            <Popup>
+              📍 موقع الكاميرا في أبها
+              <br />
+              <strong>Status:</strong> {v.traffic_status}
+              <br />
+              <strong>Battery:</strong> {v.battery_percentage}%
+            </Popup>
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 }
+

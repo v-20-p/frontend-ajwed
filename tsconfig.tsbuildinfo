@@ -1,1 +1,1 @@
-{"root":["./src/ui/app.tsx","./src/ui/main.tsx","./src/ui/vite-env.d.ts"],"version":"5.7.3"}
+{"root":["./src/ui/app.tsx","./src/ui/main.tsx","./src/ui/theme.ts","./src/ui/vite-env.d.ts","./src/ui/components/boxcard.tsx","./src/ui/components/header.tsx","./src/ui/components/maps.tsx"],"version":"5.7.3"}
